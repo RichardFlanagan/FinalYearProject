@@ -42,7 +42,13 @@ my time of research and implementation.
 ## Images
 
 ![](http://i.imgur.com/uXXi2zy.jpg)
-![]()
-![]()
-![]()
-![]()
+![](http://i.imgur.com/1m8yfmy.png)
+![](http://i.imgur.com/RlZK6V0.png)
+![](http://imgur.com/ECrpEN9.png)
+![](http://i.imgur.com/B6Xf0wI.png)
+![](http://i.imgur.com/TIfZqSe.png)
+![](http://i.imgur.com/FoKIibw.png)
+![](http://i.imgur.com/QCiFYiY.png)
+![](http://i.imgur.com/nEXFcg0.png)
+![](http://i.imgur.com/t4yQjeD.png)
+![](http://i.imgur.com/XqunC8W.png)
