@@ -1,0 +1,21 @@
+{% load staticfiles %}
+
+<script src="{% static 'website/googlemaps.js' %}"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyJo6UvxVflijdZ_l3R6EfRXQ6Ez8Xx04&callback=createTweetMap"></script>
+
+<script>
+	function createTweetMap(){
+		createNewMap(0, 0, 1);
+		{% for i in collection %}
+			placeMapMarker(parseFloat("{{ i.coordinates.coordinates.1 }}"), parseFloat("{{ i.coordinates.coordinates.0 }}"));
+		{% endfor %}
+		setPageHeight();
+	}
+</script>
+
+<div class="moduleContent">
+	<div class="ui-widget-content ui-corner-all statusBox">
+		<h3 class="statusBoxHeader">Tweet Map</h3>
+		<div id="map" class="ui-corner-all"></div>
+	</div>
+</div>

@@ -1,0 +1,49 @@
+{% extends 'website/base_template.html' %}
+
+{% block statics %}
+	<link href="//cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="//cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+{% endblock %}
+
+
+{% block scripts %}
+	<script>
+		$(document).ready(function() {
+		    $('#collectionTable').DataTable();
+		});
+	</script>
+{% endblock %}
+
+
+{% block content %}
+	<div class="contentPageWrapper">
+
+		<div class="contentPageHeaderBlock">
+			<h2>Collection: {{ collection_name }}</h2>
+			<p>Here is the data from the {{ collection_name }} collection</p>
+		</div>
+
+		<div class="contentPageContentBlock">
+			<table id="collectionTable" class="display" cellspacing="0" width="100%">
+				<thead>
+					<th>user.name</th>
+					<th>created_at</th>
+					<th>coordinates</th>
+					<th>lang</th>
+					<th>text</th>
+				</thead>
+
+				{% for i in collection %}
+					<tr>
+				    	<td>{{ i.user.name }} </td>
+				    	<td>{{ i.created_at }} </td>
+				    	<td>{{ i.coordinates }} </td>
+				    	<td>{{ i.lang }} </td>
+				    	<td>{{ i.text }} </td>
+				    </tr>
+				{% endfor %}
+		    </table>
+		</div>
+
+	</div>
+{% endblock %}

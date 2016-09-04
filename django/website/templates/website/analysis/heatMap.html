@@ -1,0 +1,28 @@
+{% load staticfiles %}
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+<script>
+	function createHeatMap(){
+		var heatMapData = google.visualization.arrayToDataTable({{ collection }});
+
+		var heatMapOptions = {
+			colorAxis: {colors: ['white', 'red']},
+          	backgroundColor: '#81d4fa'      	
+        };
+		var chart = new google.visualization.GeoChart(document.getElementById('heatMap'));
+		chart.draw(heatMapData, heatMapOptions);
+		setPageHeight();
+	}
+
+	google.charts.load('current', {'packages':['geochart']});
+	google.charts.setOnLoadCallback(createHeatMap);
+</script>
+
+<div class="moduleContent">
+	<div class="ui-widget-content ui-corner-all statusBox">
+		<h3 class="statusBoxHeader">Heat Map</h3>
+		<div id="heatMap" class="ui-corner-all"></div>
+	</div>
+</div>

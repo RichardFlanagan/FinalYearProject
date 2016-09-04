@@ -1,0 +1,121 @@
+{% extends 'website/base_template.html' %}
+{% load staticfiles %}
+
+{% block statics %}
+	<script src="{% static 'website/googlemaps.js' %}"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyJo6UvxVflijdZ_l3R6EfRXQ6Ez8Xx04&callback=createHarvestMap"></script>
+{% endblock %}
+
+
+{% block scripts %}
+	<script>
+		function createHarvestMap(){
+			initMap();
+			setPageHeight();
+		}
+		function processForm(){
+			var name = $("#instanceName").val();
+			var duration = parseFloat($("#duration").val());
+			var language = $("#langSelect").val();
+			var filterType = $("#filterSelect").val();
+			var trackingTerms = $("#trackingTerms").val();
+			var boundingType = $("#boundingTypeSelect").val();
+			var boundingBox = "";
+
+			if(boundingType == "boundingBox"){
+				boundingBox = getMapBoundingBox();
+			} else if(boundingType == "ireland"){
+				boundingBox = irelandBoundingBox;
+			}
+
+			var request = $.ajax({
+				url: "/api/twitter/collect/",
+				method: "POST",
+				data: JSON.stringify({ 
+					"name": name,
+					"trackingTerms": trackingTerms,
+					"filterType":filterType,
+					"duration": duration,
+					"language": language,
+					"boundingType": boundingType,
+					"boundingBox": boundingBox
+				})
+			});
+
+			request.done(function(msg) {
+				console.log(msg);
+				//window.location = "{ % url 'status' %}";
+			});
+
+			request.fail(function(jqXHR, textStatus) {
+				console.log("Request failed: " + textStatus);
+			});
+		}
+		$(document).ready(function() {
+			$("#submitButton").click(processForm);
+			$("#langSelect-button").css("position", "relative");
+			$("#langSelect-button").css("left", "10px");
+		});
+	</script>
+{% endblock %}
+
+
+{% block content %}
+	<div class="contentPageWrapper">
+		<div class="contentPageHeaderBlock">
+			<h2>Harvest Data</h2>
+			<p>Create and populate a new collection</p>
+		</div>
+
+		<div class="contentPageContentBlock">
+			
+			<div id="details" class="ui-widget-content ui-corner-all statusBox">
+				<h3 class="statusBoxHeader">Instance Details</h3>
+					<label class="statusBoxColumnItem" for="instanceName">Instance Name</label>
+					<input class="statusBoxColumnItem" type="text" placeholder="my_data" id="instanceName" title="The name of your data collection instance. This will be used to generate the database collection name." required></input>
+
+
+					<label class="statusBoxColumnItem" for="duration">Duration (minutes)</label>
+					<input class="statusBoxColumnItem" type="number" id="duration" title="How many minutes will the data collection run last for?" value="60"required></input>
+
+					<label class="statusBoxColumnItem" for="langSelect">Language</label>
+					<select class="statusBoxColumnItem" id="langSelect">
+						<option value="all" selected="selected">All</option>
+						<option value="en">English</option>
+						<option value="fr">French</option>
+						<option value="de">German</option>
+						<option value="es">Spanish</option>
+					</select>
+
+					<label class="statusBoxColumnItem" for="filterSelect">Filter Method</label>
+					<select class="statusBoxColumnItem" id="filterSelect">
+						<option value="location" selected="selected">Location</option>
+						<option value="trackingTerms">Tracking Terms</option>
+					</select>
+
+					<label class="statusBoxColumnItem" for="trackingTerms">Tracking Terms</label>
+					<input class="statusBoxColumnItem" type="text" placeholder="tracking_terms" id="trackingTerms" title="The terms you wish to track across twitter. You can think of commas as logical ORs, while spaces are equivalent to logical ANDs (e.g. ‘the twitter’ is the AND twitter, and ‘the,twitter’ is the OR twitter)."></input>
+
+				<div class="statusBoxButtonDiv">
+					<button class="statusBoxButton" id="submitButton">Create</button>
+				</div>
+			</div>
+
+			<div id="mapSection" class="ui-widget-content ui-corner-all statusBox">
+				<h3 class="statusBoxHeader">Location Settings</h3>
+				<label class="statusBoxColumnItem" for="boundingTypeSelect">Collect from</label>
+				<select class="statusBoxColumnItem" id="boundingTypeSelect">
+					<option value="boundingBox" selected="selected">Bounding Box</option>
+					<option value="ireland">Ireland</option>
+				</select>
+				<div id="map"></div>
+			</div>
+
+		</div>
+	</div>
+{% endblock %}
+
+
+
+
+

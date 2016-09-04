@@ -1,0 +1,131 @@
+{% extends 'website/base_template.html' %}
+
+{% block statics %}{% endblock %}
+{% block scripts %}
+	<script>
+		$(document).ready(function() {
+			var request = $.ajax({
+				url: "/api/twitter/status",
+				method: "GET",
+			});
+
+			request.done(function(msg) {
+				var obj = JSON.parse(msg);
+
+				if(obj.status == "stopped") {
+					draw($("#statusCanvas"), "red");
+				} else if(obj.status == "running") {
+					draw($("#statusCanvas"), "green");
+					
+					var stopButton = $("<button/>", {
+				        text: "Stop",
+				        click: function () { 
+				        	var stopRequest = $.ajax({
+								url: "/api/twitter/stop/",
+								method: "GET",
+							});
+							request.done(function(msg) {
+								location.reload();
+							});
+							request.fail(function(jqXHR, textStatus) {
+								console.log("Request failed: " + textStatus);
+							});
+				        }
+				    });
+				    stopButton.css("margin", "10px");
+					$("#stopButtonDiv").append(stopButton);
+
+				} else {
+					draw($("#statusCanvas"), "gray");
+				}
+				$("#status").text(obj.status);
+
+				if(obj.dataRequest){
+					$("#dataRequestTable-name").text(obj.dataRequest.name);
+					$("#dataRequestTable-creationTime").text(obj.dataRequest.creationTime);
+					$("#dataRequestTable-duration").text(obj.dataRequest.duration);
+					$("#dataRequestTable-language").text(obj.dataRequest.language);
+					$("#dataRequestTable-boundingType").text(obj.dataRequest.boundingType);
+
+					if(obj.dataRequest.boundingType != "global" && obj.dataRequest.boundingBox){
+						var b = "North " + obj.dataRequest.boundingBox.north + " : " +
+								"South " + obj.dataRequest.boundingBox.south + " : " +
+								"East  " + obj.dataRequest.boundingBox.east + " : " +
+								"West  " + obj.dataRequest.boundingBox.west;
+						$("#dataRequestTable-boundingBox").text(b);
+					}
+				}
+			});
+
+			request.fail(function(jqXHR, textStatus) {
+				console.log("Request failed: " + textStatus);
+
+				draw($("#statusCanvas"), "gray");
+				$("#status").text("Could not get a valid response! "+textStatus);
+			});
+        });
+
+        function draw(canvas, colour){
+        	var context = canvas[0].getContext("2d")
+			context.beginPath();
+			context.arc(15, 15, 13, 0, 2 * Math.PI, false);
+			context.fillStyle = colour;
+			context.fill();
+			context.lineWidth = 2;
+			context.strokeStyle = '#000000';
+			context.stroke();
+        }
+	</script>
+{% endblock %}
+
+{% block content %}
+	<div class="contentPageWrapper">
+		<div class="contentPageHeaderBlock">
+			<h2>Server Status</h2>
+			<p>The status of the data collection server</p>
+		</div>
+
+		<div class="contentPageContentBlock">
+			
+			<div class="ui-widget-content ui-corner-all statusBox">
+				<h3 class="statusBoxHeader">Server Status</h3>
+				<canvas id="statusCanvas" width="30" height="30"style="float:left;margin: 0px 10px 10px 10px;"></canvas>
+				<p id="status" style="float:left;width:200px;margin: 5px 0px 0px 5px;"></p>
+				<div id="stopButtonDiv"></div>
+			</div>
+
+			<div class="ui-widget-content ui-corner-all statusBox">
+				<h3 class="statusBoxHeader">Current Data Request</h3>
+				<table id="dataRequestTable"  width="100%">
+					<tbody>
+						<tr>
+							<th width="50%" style="text-align: left;">Name</th>
+							<td width="50%" style="text-align: left;" id="dataRequestTable-name"></td>
+						</tr>
+						<tr>
+							<th width="50%" style="text-align: left;">Creation Time</th>
+							<td width="50%" style="text-align: left;" id="dataRequestTable-creationTime"></td>
+						</tr>
+						<tr>
+							<th width="50%" style="text-align: left;">Duration</th>
+							<td width="50%" style="text-align: left;" id="dataRequestTable-duration"></td>
+						</tr>
+						<tr>
+							<th width="50%" style="text-align: left;">Language</th>
+							<td width="50%" style="text-align: left;" id="dataRequestTable-language"></td>
+						</tr>
+						<tr>
+							<th width="50%" style="text-align: left;">Bounding Type</th>
+							<td width="50%" style="text-align: left;" id="dataRequestTable-boundingType"></td>
+						</tr>
+						<tr>
+							<th width="50%" style="text-align: left;">Bounding Box</th>
+							<td width="50%" style="text-align: left;" id="dataRequestTable-boundingBox"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+	</div>
+{% endblock %}

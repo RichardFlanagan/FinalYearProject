@@ -1,0 +1,115 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>A00193644 :: Final Year Project</title>
+
+        <!-- Externals -->
+        <link rel="stylesheet" href="{% static 'website/jquery-ui/jquery-ui.css' %}">
+        <script src="{% static 'website/jquery-1.12.1.js' %}"></script>
+        <script src="{% static 'website/jquery-ui/jquery-ui.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'website/style.css' %}">
+
+        <!-- Additional static content -->
+        {% block statics %}{% endblock %}
+
+        <!-- Additional scripts content -->
+        {% block scripts %}{% endblock %}
+
+        <!-- Scripts -->
+        <script>
+            function setPageHeight(){
+                if(($('#header').height() + $('#content').height() + $('#footer').height()) < $(window).height()){
+                    $('#content').height(
+                        $(window).height() - $('#header').height() - $('#footer').height()
+                    );
+                }
+                equalDivHeight('#sidebar', '#content');
+            }
+            function equalDivHeight(divA, divB){
+                if($(divA).height() < $(divB).height()){
+                    $(divA).height($(divB).height());
+                } else{
+                    $(divB).height($(divA).height());
+                }
+            }
+            function styleDomItems(){
+                // Tooltips
+                $("input[title]").tooltip();
+
+                // Buttons
+                //$("input[type=submit], button").button();
+
+                // Inputs
+                $("input").addClass("ui-corner-all");
+
+                // Selectboxes
+                //$("select").selectmenu();
+            }
+            $(document).ready(function() {
+                setPageHeight();
+                styleDomItems();
+            });
+        </script>
+
+
+    </head>
+    <body>
+        <div id="page" class="ui-widget">
+
+            <!-- Page header -->
+            <div id="headerImageDiv">
+                <img src="{% static 'website/image.png' %}" alt="" style="width:200px;height:100px;">
+            </div>
+            <div id="header">
+                <h1 class="headerText" style="font-size:2em;"><a style="text-decoration:none;color:#333;" href="{% url 'index' %}">Final Year Project</a></h1>
+                <h1 class="headerText" style="font-size:1.25em;">Twitter Data Analysis & Visualization</h1>
+            </div>
+
+            <!-- Sidebar -->
+            <div id="sidebar">
+                <!--ul>
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li><a href="{% url 'status' %}">Status</a></li>
+                    <li><a href="{% url 'harvest' %}">Collect Data</a></li>
+                    <li><a href="{% url 'collections' %}">Data Collections</a></li>
+                    <li><a href="{% url 'about' %}">About</a></li>
+                </ul-->
+                    <a class="sidebarItem" href="{% url 'index' %}">
+                        <div>Home</div>
+                    </a>
+                    
+                    <a class="sidebarItem" href="{% url 'status' %}">
+                        <div>Status</div>
+                    </a>
+                   
+                    <a class="sidebarItem" href="{% url 'harvest' %}">
+                        <div>Collect Data</div>
+                    </a>
+                    
+                    <a class="sidebarItem" href="{% url 'collections' %}">
+                        <div>Data Collections</div>
+                    </a>
+                    
+                    <a class="sidebarItem" href="{% url 'about' %}">
+                        <div>About</div>
+                    </a>
+                </ul>
+            </div>
+            
+            <!-- Page content -->
+            <div id="content">
+                {% block content %}{% endblock %}
+            </div>
+
+        </div>
+    </body>
+    <footer>
+
+        <!-- Page footer -->
+        <div id="footer" class="ui-widget">
+            <p>&copy; 2016 Richard Flanagan : A00193644</p>
+        </div>
+
+    </footer>
+</html>

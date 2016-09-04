@@ -1,0 +1,36 @@
+{% extends 'website/base_template.html' %}
+
+{% block statics %}{% endblock %}
+{% block scripts %}{% endblock %}
+
+{% block content %}
+	<div class="contentPageWrapper">
+		<div class="contentPageHeaderBlock">
+			<h2>Visualize</h2>
+		</div>
+
+		<div class="contentPageContentBlock">
+			
+			{% if tweetMapCollection %}
+				{% include 'website/analysis/tweetMap.html' with collection=tweetMapCollection %}
+			{% endif %}
+
+			{% if heatMapCollection %}
+				{% include 'website/analysis/heatMap.html' with collection=heatMapCollection %}
+			{% endif %}
+
+			{% if timeGraphCollection %}
+				{% include 'website/analysis/timeGraph.html' with collection=timeGraphCollection %}
+			{% endif %}
+
+			{% if hashtagChartCollection %}
+				{% include 'website/analysis/hashtagChart.html' with collection=hashtagChartCollection %}
+			{% endif %}
+
+			{% if hashtagTimeTrendCollection %}
+				{% include 'website/analysis/hashtagTimeTrend.html' with collection=hashtagTimeTrendCollection %}
+			{% endif %}
+
+		</div>
+	</div>
+{% endblock %}

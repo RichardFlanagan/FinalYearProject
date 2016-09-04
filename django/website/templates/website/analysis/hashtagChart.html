@@ -1,0 +1,35 @@
+{% load staticfiles %}
+
+<script type="text/javascript" src="{% static 'website/Chart.js' %}"></script>
+
+<script>
+	function createHashtagChart(){
+		var chartData = {{ collection }};
+
+		var chartOptions = {
+		    segmentShowStroke : true,
+		    segmentStrokeColor : "#333",
+		    segmentStrokeWidth : 1,
+		    percentageInnerCutout : 40,
+		    animationSteps : 100,
+		    animationEasing : "easeOutBounce",
+		    animateRotate : false,
+		    animateScale : false,
+		    legendTemplate : ""
+		};		
+
+		var ctx = $("#hashtagChart").get(0).getContext("2d");
+		var chart = new Chart(ctx).Pie(chartData, chartOptions);
+	}
+	$(document).ready(function() {
+		createHashtagChart();
+		setPageHeight();
+	});
+</script>
+
+<div class="moduleContent">
+	<div class="ui-widget-content ui-corner-all statusBox">
+		<h3 class="statusBoxHeader">Hashtag Chart</h3>
+		<canvas id="hashtagChart" width="700" height="400"></canvas>
+	</div>
+</div>

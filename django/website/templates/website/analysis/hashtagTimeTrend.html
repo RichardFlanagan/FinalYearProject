@@ -1,0 +1,68 @@
+{% load staticfiles %}
+
+<script type="text/javascript" src="{% static 'website/Chart.js' %}"></script>
+
+<script>
+	function createHashtagTimeTrend(){
+		var col = {{collection}};
+		var labels = [];
+		var data = [];
+
+		for(var i=0; i<60; i++){
+			labels.push(i);
+			data.push(0);
+		}
+
+		for(var i=0; i<col.length; i++){
+			data[col[i][0]] = col[i][1];
+		}
+		
+		var chartData = {
+			labels: labels,
+			datasets: [
+		        {
+		            label: "Tweets per hour",
+		            fillColor: "rgba(220,220,220,0.2)",
+		            strokeColor: "rgba(100,220,100,1)",
+		            pointColor: "rgba(100,180,100,1)",
+		            pointStrokeColor: "#000",
+		            pointHighlightFill: "#fff",
+		            pointHighlightStroke: "#000",
+		            data: data
+		        }
+		    ]
+		};
+		var chartOptions = {
+		    scaleShowGridLines : true,
+		    scaleGridLineColor : "rgba(0,0,0,.05)",
+		    scaleGridLineWidth : 1,
+		    scaleShowHorizontalLines: true,
+		    scaleShowVerticalLines: true,
+		    bezierCurve : true,
+		    bezierCurveTension : 0.4,
+		    pointDot : true,
+		    pointDotRadius : 4,
+		    pointDotStrokeWidth : 1,
+		    pointHitDetectionRadius : 5,
+		    datasetStroke : true,
+		    datasetStrokeWidth : 2,
+		    datasetFill : true,
+		    legendTemplate:""
+		};
+
+		var ctx = $("#hashtagTimeTrend").get(0).getContext("2d");
+		var chart = new Chart(ctx).Line(chartData, chartOptions);
+	}
+	$(document).ready(function() {
+		console.log({{ collection }});
+		createHashtagTimeTrend();
+		setPageHeight();
+	});
+</script>
+
+<div class="moduleContent">
+	<div class="ui-widget-content ui-corner-all statusBox">
+		<h3 class="statusBoxHeader">Time Graph</h3>
+		<canvas id="hashtagTimeTrend" width="700" height="400"></canvas>
+	</div>
+</div>

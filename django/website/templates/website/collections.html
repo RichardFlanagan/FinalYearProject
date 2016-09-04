@@ -1,0 +1,36 @@
+{% extends 'website/base_template.html' %}
+
+{% block statics %}{% endblock %}
+{% block scripts %}{% endblock %}
+
+{% block content %}
+	<div class="contentPageWrapper">
+		<div class="contentPageHeaderBlock">
+			<h2>Twitter data collections</h2>
+			<p>Here is a list of previously collected twitter data collections which you can view</p>
+		</div>
+
+		<div class="contentPageContentBlock">
+			{% if collections.length != 0 %}
+				<table style="width:100%; text-align:left;">
+					<tr>
+						<th>Collection Name</th>
+						<th>View Collection</th>
+						<th>Collection Analysis</th>
+					</tr>
+					{% for collection in collections %}
+						{% if collection != "system.indexes" %}
+							<tr>
+								<td>{{ collection }}</td>
+								<td><a href="{% url 'collection' collection %}">collection</a></td>
+								<td><a href="{% url 'analysis' collection %}">analysis</a></td>
+							</tr>
+						{% endif %}
+					{% endfor %}
+				</table>
+			{% else %}
+				<p>No collections found!</p>
+			{% endif %}
+		</div>
+	</div>
+{% endblock %}

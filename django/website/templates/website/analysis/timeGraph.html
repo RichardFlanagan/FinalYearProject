@@ -1,0 +1,61 @@
+{% load staticfiles %}
+
+<script type="text/javascript" src="{% static 'website/Chart.js' %}"></script>
+
+<script>
+	function createTimeGraph(){
+		var chartData = {
+			labels: [
+				"12pm","1am","2am","3am",
+				"4am","5am","6am","7am",
+				"8am","9am","10am","11am",
+				"12pm","1pm","2pm","3pm",
+				"4pm","5pm","6pm","7pm",
+				"8pm","9pm","10pm","11pm"
+			],
+			datasets: [
+		        {
+		            label: "Tweets per hour",
+		            fillColor: "rgba(220,220,220,0.2)",
+		            strokeColor: "rgba(100,220,100,1)",
+		            pointColor: "rgba(100,180,100,1)",
+		            pointStrokeColor: "#000",
+		            pointHighlightFill: "#fff",
+		            pointHighlightStroke: "#000",
+		            data: {{ collection }}
+		        }
+		    ]
+		};
+		var chartOptions = {
+		    scaleShowGridLines : true,
+		    scaleGridLineColor : "rgba(0,0,0,.05)",
+		    scaleGridLineWidth : 1,
+		    scaleShowHorizontalLines: true,
+		    scaleShowVerticalLines: true,
+		    bezierCurve : true,
+		    bezierCurveTension : 0.4,
+		    pointDot : true,
+		    pointDotRadius : 4,
+		    pointDotStrokeWidth : 1,
+		    pointHitDetectionRadius : 5,
+		    datasetStroke : true,
+		    datasetStrokeWidth : 2,
+		    datasetFill : true,
+		    legendTemplate:""
+		};
+
+		var ctx = $("#timeGraph").get(0).getContext("2d");
+		var chart = new Chart(ctx).Line(chartData, chartOptions);
+	}
+	$(document).ready(function() {
+		createTimeGraph();
+		setPageHeight();
+	});
+</script>
+
+<div class="moduleContent">
+	<div class="ui-widget-content ui-corner-all statusBox">
+		<h3 class="statusBoxHeader">Time Graph</h3>
+		<canvas id="timeGraph" width="700" height="400"></canvas>
+	</div>
+</div>

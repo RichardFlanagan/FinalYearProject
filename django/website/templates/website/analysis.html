@@ -1,0 +1,69 @@
+{% extends 'website/base_template.html' %}
+
+{% block statics %}{% endblock %}
+{% block scripts %}
+	<script>
+		function visualizeButtonEvent(){
+			var tweetMap = $("#tweetMapCheckbox").is(':checked') ? "tweetMap=1" : null;
+			var heatMap = $("#heatMapCheckbox").is(':checked') ? "heatMap=1" : null;
+			var timeGraph = $("#timeGraphCheckbox").is(':checked') ? "timeGraph=1" : null;
+			var hashtagChart = $("#hashtagChartCheckbox").is(':checked') ? "hashtagChart=1" : null;
+			var hashtagTimeTrend = $("#hashtagTimeTrendCheckbox").is(':checked') ? "hashtagTimeTrend=1" : null;
+			var hashtagTerm = $("#hashtagTimeTrendInput").val();
+			
+			var url = "{% url 'visualize' collection_name %}";
+			var first = true;
+			if(tweetMap){
+				url = url+(first?"?":"&")+tweetMap;
+				first=false;
+			}
+			if(heatMap){
+				url = url+(first?"?":"&")+heatMap;
+				first=false;
+			}
+			if(timeGraph){
+				url = url+(first?"?":"&")+timeGraph;
+				first=false;
+			}
+			if(hashtagChart){
+				url = url+(first?"?":"&")+hashtagChart;
+				first=false;
+			}
+			if(hashtagTimeTrend && hashtagTerm != ""){
+				url = url+(first?"?":"&")+hashtagTimeTrend;
+				url = url+"&hashtagTerm="+hashtagTerm;
+				first=false;
+			}
+			window.location = url;		
+		}
+		$(document).ready(function() {
+			$("#visualizeButton").click(visualizeButtonEvent);
+		});
+
+		console.log(Date("1457703196833").getHours());
+	</script>
+{% endblock %}
+
+{% block content %}
+	<div class="contentPageWrapper">
+		<div class="contentPageHeaderBlock">
+			<h2>Analysis</h2>
+			<p>{{ collection_name }} collection</p>
+		</div>
+
+		<div class="contentPageContentBlock">
+			<input type="checkbox" id="tweetMapCheckbox">Tweet Map</input>
+			<br/>
+			<input type="checkbox" id="heatMapCheckbox">Heat Map</input>
+			<br/>
+			<input type="checkbox" id="timeGraphCheckbox">Time Graph</input>
+			<br/>
+			<input type="checkbox" id="hashtagChartCheckbox">Hashtag Chart</input>
+			<br/>
+			<input type="checkbox" id="hashtagTimeTrendCheckbox">Hashtag-over-Time Trend Graph</input>
+			<input type="text" id="hashtagTimeTrendInput" placeholder="hashtag term"></input>
+			<br/>
+			<button id="visualizeButton">Submit</button>
+		</div>
+	</div>
+{% endblock %}
